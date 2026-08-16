@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Rextro</title>
+    
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav">
+        <ul>
+            <a href="index.html" class="linki">Home</a>
+            <a href="#" class="link">Features</a>
+            <a href="#" class="link">Downloads</a>
+            <a href="#" class="link">About Us</a>
+            <a href="#" class="link">Contact Us</a>
+            <button class="btn" onclick="window.location.href='login.html'">Login</button>
+        </ul>
+    </nav>
+
+    <!-- Register Container -->
+    <div class="mainc">
+        <div class="regc">
+            <h1 class="titl">Create Account</h1>
+            <p class="subt">Join Rextro and manage your health</p>
+            
+            <form id="regf">
+                <div class="inpg">
+                    <i class="fa-solid fa-user ico"></i>
+                    <input type="text" id="rname" placeholder="Full Name" required>
+                </div>
+                <div class="inpg">
+                    <i class="fa-solid fa-envelope ico"></i>
+                    <input type="email" id="remail" placeholder="Email Address" required>
+                </div>
+                <div class="inpg">
+                    <i class="fa-solid fa-lock ico"></i>
+                    <input type="password" id="rpass" placeholder="Password (min 6 chars)" required>
+                </div>
+                <button type="submit" class="rbtn">Register</button>
+            </form>
+            
+            <div class="divr">
+                <p>Already have an account? <a href="login.html" class="lnk">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

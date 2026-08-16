@@ -1,0 +1,131 @@
+/* --- Login & Register Page Styles (Max 4 chars per class) --- */
+
+.mainc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.logc, .regc {
+    background: #ffffff;
+    padding: 40px;
+    width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.titl {
+    font-family: "Bruno Ace", sans-serif;
+    font-size: 28px;
+    color: #222;
+    margin-bottom: 5px;
+}
+
+.subt {
+    font-family: "Roboto", sans-serif;
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.inpg {
+    display: flex;
+    align-items: center;
+    background: #f0f2f5;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 0 15px;
+    border: 1px solid #ddd;
+}
+
+.ico {
+    color: #888;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.inpg input {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+}
+
+.lbtn, .rbtn {
+    width: 100%;
+    background: linear-gradient(to right, rgb(245, 114, 245), rgb(106, 106, 241));
+    border: none;
+    padding: 12px;
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.divr {
+    margin-top: 15px;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+}
+
+.lnk {
+    color: rgb(106, 106, 241);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.orln {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #888;
+    font-size: 14px;
+}
+
+.orln hr {
+    flex: 1;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.orln span {
+    padding: 0 10px;
+}
+
+.socb {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sbtn {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.sbtn:hover {
+    background: #f5f5f5;
+}
+
+.sbtn i {
+    font-size: 18px;
+}
