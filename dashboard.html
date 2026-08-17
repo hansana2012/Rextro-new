@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Rextro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="dbod">
+        <!-- Side Nav -->
+        <nav class="dnav" id="dnav">
+            <div class="dlgo">Rextro <span>Hub</span></div>
+            <div class="dlks">
+                <a href="#" class="dlk act"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="#" class="dlk"><i class="fa-solid fa-user"></i> Profile</a>
+                <a href="#exer" class="dlk"><i class="fa-solid fa-dumbbell"></i> Exercise</a>
+                <a href="#meds" class="dlk"><i class="fa-solid fa-pills"></i> Medicine</a>
+                <a href="#ocr" class="dlk"><i class="fa-solid fa-camera"></i> OCR Scan</a>
+                <a href="#" class="dlk"><i class="fa-solid fa-right-from-bracket" style="color:#f44336;"></i> Logout</a>
+            </div>
+        </nav>
+
+        <!-- Dashboard Content -->
+        <div class="dbodc">
+            <!-- Top Bar -->
+            <div class="dtop">
+                <button class="dtog" onclick="toggleNav()"><i class="fa-solid fa-bars"></i></button>
+                <h1 style="color:#fff; font-family:'Bebas Neue';">Dashboard</h1>
+                <div class="duser" onclick="document.getElementById('prof').scrollIntoView();">
+                    <img src="https://ui-avatars.com/api/?name=User&background=b33bff&color=fff" id="uimg" alt="User">
+                    <span id="uname">User</span>
+                </div>
+            </div>
+
+            <!-- Stats Widgets -->
+            <div class="dwidg">
+                <div class="dwid"><i class="fa-solid fa-shoe-prints"></i><h3>Steps</h3><p id="steps">8,420</p></div>
+                <div class="dwid"><i class="fa-solid fa-heart-pulse"></i><h3>BPM</h3><p id="bpm">72</p></div>
+                <div class="dwid"><i class="fa-solid fa-fire"></i><h3>Calories</h3><p id="cal">320</p></div>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="dsec" id="prof">
+                <h2>Profile Settings</h2>
+                <div class="dprof">
+                    <img src="https://ui-avatars.com/api/?name=User&background=b33bff&color=fff" id="pimg" onclick="document.getElementById('fileInput').click();">
+                    <input type="file" id="fileInput" accept="image/*" onchange="uploadPic(this)">
+                    <input type="text" id="pname" placeholder="Full Name" value="User">
+                    <input type="email" id="pemail" placeholder="Email" value="user@email.com" readonly>
+                    <button class="dbtn" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Exercise Section -->
+            <div class="dsec" id="exer">
+                <h2>Exercise <span style="font-size:14px;color:#888;">(Click to start animation)</span></h2>
+                <div class="dexer">
+                    <div class="dexc" onclick="toggleAnim(this, 'jump')">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <span style="position:absolute;bottom:-25px;color:#aaa;">Jump</span>
+                    </div>
+                    <div class="dexc" onclick="toggleAnim(this, 'run')">
+                        <svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/></svg>
+                        <span style="position:absolute;bottom:-25px;color:#aaa;">Run</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medicine & OCR -->
+            <div class="dsec" id="meds">
+                <h2>Medicine Tracker</h2>
+                <div class="dmed">
+                    <div>
+                        <h3>Set Reminder</h3>
+                        <input type="time" id="medtime">
+                        <button onclick="setReminder()">Set</button>
+                        <p id="remstat" style="color:#4caf50;margin-top:10px;font-size:12px;"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dsec" id="ocr">
+                <h2>OCR Scan</h2>
+                <div class="dmed">
+                    <div style="border:2px dashed #2a2a3a; padding:30px;">
+                        <i class="fa-solid fa-cloud-upload-alt" style="font-size:3rem;color:#b33bff;"></i>
+                        <p style="color:#888;margin-top:10px;">Upload Prescription Image</p>
+                        <button class="dbtn" onclick="alert('OCR scanning feature coming soon!')">Scan Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
