@@ -10,19 +10,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
     <!-- Nav -->
-    <nav class="nav">
-        <ul>
-            <a href="index.html" class="linki">Home</a>
-            <a href="#" class="link">Features</a>
-            <a href="#" class="link">Downloads</a>
-            <a href="#" class="link">About Us</a>
-            <a href="#" class="link">Contact Us</a>
-            <button class="btn" onclick="window.location.href='login.html'">Sign In</button>
-        </ul>
-    </nav>
+<!-- Nav -->
+<nav class="nav">
+    <!-- Logo / Home link eka left side -->
+    <a href="index.html" class="linki" style="margin:0; font-weight:bold; font-family:'Bruno Ace'; color:#b33bff;">Rextro</a>
+    
+    <!-- Hamburger Icon -->
+    <div class="hamb" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <!-- Menu Links -->
+    <ul id="navMenu">
+        <a href="index.html" class="linki">Home</a>
+        <a href="#" class="link">Features</a>
+        <a href="#" class="link">Downloads</a>
+        <a href="#" class="link">About Us</a>
+        <a href="#" class="link">Contact Us</a>
+        <button class="btn" onclick="window.location.href='login.html'">Sign In</button>
+    </ul>
+</nav>
+
+<!-- Add this JS at the bottom of index.html, before </body> -->
 
     <!-- Hero -->
     <div class="bordiv">
@@ -154,6 +167,7 @@
                         <li class="pitem"><i class="fa-solid fa-check flic okic"></i> Direct Messaging Option</li>
                         <li class="pitem"><i class="fa-solid fa-check flic okic"></i> Background Verification</li>
                         <li class="pitem"><i class="fa-solid fa-xmark flic noic"></i> 24/7 Priority Support</li>
+                        </ul>
                 <button class="subscribe">Subscribe</button>
             </div>
             <div class="freediv">
@@ -240,4 +254,9 @@
         </div>
     </div>
 </body>
+<script>
+function toggleMenu() {
+    document.getElementById('navMenu').classList.toggle('show');
+}
+</script>
 </html>

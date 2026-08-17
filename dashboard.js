@@ -2,13 +2,14 @@
 // 1. FIREBASE CONFIG (SAME AS auth.js)
 // ==========================================
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCB5vUpkeHUG8S0YC1tkNFxM9fmiXehg1c",
+    authDomain: "rextro-a29a2.firebaseapp.com",
+    databaseURL: "https://rextro-a29a2-default-rtdb.firebaseio.com",
+    projectId: "rextro-a29a2",
+    storageBucket: "rextro-a29a2.firebasestorage.app",
+    messagingSenderId: "563362233355",
+    appId: "1:563362233355:web:8683f46669e9d7a6aa9b0e",
+    measurementId: "G-H40F0FXVC2"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -20,29 +21,24 @@ const db = firebase.database();
 // ==========================================
 auth.onAuthStateChanged((user) => {
     if (!user) {
-        // If not logged in, redirect to login page
         window.location.href = "login.html";
     } else {
-        // If logged in, load dashboard data
         loadDashboardData(user);
     }
 });
 
 // ==========================================
-// 3. LOAD DASHBOARD DATA (Profile, Stats)
+// 3. LOAD DASHBOARD DATA
 // ==========================================
 function loadDashboardData(user) {
-    // Load Name & Email
     document.getElementById('uname').innerText = user.displayName || "User";
     document.getElementById('pname').value = user.displayName || "";
     document.getElementById('pemail').value = user.email || "";
 
-    // Load Profile Picture (from Google or Database)
     if (user.photoURL) {
         document.getElementById('uimg').src = user.photoURL;
         document.getElementById('pimg').src = user.photoURL;
     } else {
-        // Load saved image from database (if uploaded manually)
         db.ref('users/' + user.uid + '/photo').on('value', (snapshot) => {
             if (snapshot.val()) {
                 document.getElementById('pimg').src = snapshot.val();
@@ -51,7 +47,6 @@ function loadDashboardData(user) {
         });
     }
 
-    // Load Stats (Steps, BPM, Calories)
     db.ref('users/' + user.uid + '/stats').on('value', (snapshot) => {
         if (snapshot.val()) {
             document.getElementById('steps').innerText = snapshot.val().steps || 0;
@@ -62,7 +57,7 @@ function loadDashboardData(user) {
 }
 
 // ==========================================
-// 4. SAVE PROFILE (Name only)
+// 4. SAVE PROFILE
 // ==========================================
 function saveProfile() {
     const user = auth.currentUser;
@@ -79,17 +74,14 @@ function saveProfile() {
 }
 
 // ==========================================
-// 5. IMAGE UPLOAD (Base64 - Simple)
+// 5. IMAGE UPLOAD (Base64)
 // ==========================================
 function uploadPic(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            // Update UI
             document.getElementById('pimg').src = e.target.result;
             document.getElementById('uimg').src = e.target.result;
-            
-            // Save to Database
             const user = auth.currentUser;
             db.ref('users/' + user.uid + '/photo').set(e.target.result);
         };
@@ -103,7 +95,6 @@ function uploadPic(input) {
 function toggleAnim(el, type) {
     el.classList.toggle('act');
     if (el.classList.contains('act')) {
-        // Update stats randomly
         let steps = parseInt(document.getElementById('steps').innerText) || 0;
         let cal = parseInt(document.getElementById('cal').innerText) || 0;
         
@@ -113,7 +104,6 @@ function toggleAnim(el, type) {
         document.getElementById('steps').innerText = steps;
         document.getElementById('cal').innerText = cal;
 
-        // Save to Database
         const user = auth.currentUser;
         db.ref('users/' + user.uid + '/stats').update({
             steps: steps,
@@ -139,11 +129,15 @@ function toggleNav() {
 }
 
 // ==========================================
-// 9. LOGOUT FUNCTION
+// 9. LOGOUT FUNCTION (Fixed ID)
 // ==========================================
-document.getElementById('logoutBtn').addEventListener('click', (e) => {
-    e.preventDefault();
-    auth.signOut().then(() => {
-        window.location.href = "login.html";
+// 🔥 මෙතන HTML එකේ Logout බොත්තමට id="logoutBtn" දීමට මතක තබා ගන්න
+const logoutBtn = document.querySelector('.dlk:last-child'); // Last child ekak logout eka
+if(logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            window.location.href = "login.html";
+        });
     });
-});
+}

@@ -787,7 +787,9 @@ body {
     .footlinks { flex-direction: column; align-items: center; }
 }
 
-
+.hamb{
+display:none;
+}
 
 
 /* ========================================= */
@@ -867,4 +869,83 @@ body {
     .dbodc { margin-left: 0; padding: 15px; }
     .dtog { display: block; }
     .dwidg { grid-template-columns: 1fr 1fr; }
+}
+/* ========================================= */
+/* INDEX PAGE MOBILE NAV (FULL SCREEN FIX)    */
+/* ========================================= */
+@media screen and (max-width: 768px) {
+    /* Nav bar එක */
+    .nav {
+        height: 60px;
+        padding: 0 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+    
+    /* Hamburger icon එක පෙන්වන්න */
+    .hamb {
+        display: block !important;
+        color: #fff;
+        font-size: 26px;
+        cursor: pointer;
+        z-index: 1001;
+    }
+    
+    /* Menu එක Full Screen විදියට */
+    .nav ul {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #0d0d14; /* Dark background */
+        position: fixed; /* Screen එකේ උඩින්ම */
+        top: 0;
+        left: 0;
+        width: 100vw; /* Full width */
+        height: 100vh; /* Full height */
+        margin: 0;
+        padding: 0;
+        gap: 25px;
+        z-index: 999;
+        transition: 0.3s ease-in-out;
+        
+        /* පළමුවෙන්ම screen එකෙන් එලියෙන් */
+        transform: translateX(100%);
+    }
+    
+    /* Menu එක පෙන්වන විට */
+    .nav ul.show {
+        transform: translateX(0);
+    }
+    
+    /* Links styling */
+    .nav ul .linki, .nav ul .link {
+        font-size: 1.4rem;
+        padding: 15px 0;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+        text-decoration: none;
+    }
+    
+    .nav ul .linki:hover, .nav ul .link:hover {
+        color: #b33bff;
+    }
+    
+    /* Button එක මැදට */
+    .nav ul .btn {
+        width: 80%;
+        max-width: 200px;
+        margin: 10px auto;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    /* Close වෙන්න Hamburger එක උඩ දකුණට */
+    .hamb {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+    }
 }
