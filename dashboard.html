@@ -16,85 +16,209 @@
 </head>
 <body>
     <div class="dbod">
-        <!-- Side Nav -->
-        <nav class="dnav" id="dnav">
-            <div class="dlgo">Rextro <span>Hub</span></div>
-            <div class="dlks">
-                <a href="#" class="dlk act"><i class="fa-solid fa-house"></i> Home</a>
-                <a href="#" class="dlk"><i class="fa-solid fa-user"></i> Profile</a>
-                <a href="#exer" class="dlk"><i class="fa-solid fa-dumbbell"></i> Exercise</a>
-                <a href="#meds" class="dlk"><i class="fa-solid fa-pills"></i> Medicine</a>
-                <a href="#ocr" class="dlk"><i class="fa-solid fa-camera"></i> OCR Scan</a>
-               <a href="#" id="logoutBtn" class="dlk"><i class="fa-solid fa-right-from-bracket" style="color:#f44336;"></i> Logout</a>
-            </div>
-        </nav>
+<nav class="dnav" id="dnav">
+    <div class="dlgo">Rextro <span>Hub</span></div>
+    <!-- Hamburger Icon for Mobile inside Nav -->
+    <i class="fa-solid fa-xmark hamb-close" onclick="toggleNav()"></i>
+    
+    <!-- Semantically clean UL/LI List -->
+    <ul class="dlks">
+        <li><a href="#" class="dlk act" onclick="showSection('home')"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="#" class="dlk" onclick="showSection('prof')"><i class="fa-solid fa-user"></i> Profile</a></li>
+        <li><a href="#" class="dlk" onclick="showSection('exer')"><i class="fa-solid fa-dumbbell"></i> Exercise</a></li>
+        <li><a href="#" class="dlk" onclick="showSection('meds')"><i class="fa-solid fa-pills"></i> Medicine</a></li>
+        <li><a href="#" class="dlk" onclick="showSection('ocr')"><i class="fa-solid fa-camera"></i> OCR Scan</a></li>
+        <li><a href="#" class="dlk" onclick="showSection('hist')"><i class="fa-solid fa-clock-rotate-left"></i> History</a></li>
+        <li><a href="#" class="dlk" onclick="showSection('repo')"><i class="fa-solid fa-file-pdf"></i> Reports</a></li>
+        <li><a href="#" id="logoutBtn" class="dlk"><i class="fa-solid fa-right-from-bracket" style="color:#f44336;"></i> Logout</a></li>
+    </ul>
+</nav>
 
-        <!-- Dashboard Content -->
+        <!-- Dashboard Content Container -->
         <div class="dbodc">
-            <!-- Top Bar -->
-            <div class="dtop">
-                <button class="dtog" onclick="toggleNav()"><i class="fa-solid fa-bars"></i></button>
-                <h1 style="color:#fff; font-family:'Bebas Neue';">Dashboard</h1>
-                <div class="duser" onclick="document.getElementById('prof').scrollIntoView();">
-                    <img src="https://ui-avatars.com/api/?name=User&background=b33bff&color=fff" id="uimg" alt="User">
-                    <span id="uname">User</span>
-                </div>
-            </div>
-
-            <!-- Stats Widgets -->
-            <div class="dwidg">
-                <div class="dwid"><i class="fa-solid fa-shoe-prints"></i><h3>Steps</h3><p id="steps">8,420</p></div>
-                <div class="dwid"><i class="fa-solid fa-heart-pulse"></i><h3>BPM</h3><p id="bpm">72</p></div>
-                <div class="dwid"><i class="fa-solid fa-fire"></i><h3>Calories</h3><p id="cal">320</p></div>
-            </div>
-
-            <!-- Profile Section -->
-            <div class="dsec" id="prof">
-                <h2>Profile Settings</h2>
-                <div class="dprof">
-                    <img src="https://ui-avatars.com/api/?name=User&background=b33bff&color=fff" id="pimg" onclick="document.getElementById('fileInput').click();">
-                    <input type="file" id="fileInput" accept="image/*" onchange="uploadPic(this)">
-                    <input type="text" id="pname" placeholder="Full Name" value="User">
-                    <input type="email" id="pemail" placeholder="Email" value="user@email.com" readonly>
-                    <button class="dbtn" onclick="saveProfile()">Save Changes</button>
-                </div>
-            </div>
-
-            <!-- Exercise Section -->
-            <div class="dsec" id="exer">
-                <h2>Exercise <span style="font-size:14px;color:#888;">(Click to start animation)</span></h2>
-                <div class="dexer">
-                    <div class="dexc" onclick="toggleAnim(this, 'jump')">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        <span style="position:absolute;bottom:-25px;color:#aaa;">Jump</span>
-                    </div>
-                    <div class="dexc" onclick="toggleAnim(this, 'run')">
-                        <svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/></svg>
-                        <span style="position:absolute;bottom:-25px;color:#aaa;">Run</span>
+            <!-- Inner Content Wrapper (Full Screen/Bleed නැතිව Margin/Padding සහිතව පෙන්නුම් කිරීමට) -->
+            <div class="dbodc-inner">
+                <!-- Top Bar -->
+                <div class="dtop">
+                    <button class="dtog" onclick="toggleNav()"><i class="fa-solid fa-bars"></i></button>
+                    <h1 style="color:#fff; font-family:'Bebas Neue';">Dashboard</h1>
+                    <div class="duser">
+                        <img src="https://ui-avatars.com/api/?name=User&background=b33bff&color=fff" id="uimg" alt="User">
+                        <span id="uname">User</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- Medicine & OCR -->
-            <div class="dsec" id="meds">
-                <h2>Medicine Tracker</h2>
-                <div class="dmed">
-                    <div>
-                        <h3>Set Reminder</h3>
-                        <input type="time" id="medtime">
-                        <button onclick="setReminder()">Set</button>
-                        <p id="remstat" style="color:#4caf50;margin-top:10px;font-size:12px;"></p>
+                <!-- Home Section -->
+                <div class="dsec" id="home">
+                    <h2>Welcome to Rextro Dashboard</h2>
+                    <p style="color:#888;">Select a feature from the sidebar to get started!</p>
+                    
+                    <!-- Stats Widgets -->
+                    <div class="dwidg">
+                        <div class="dwid"><i class="fa-solid fa-shoe-prints"></i><h3>Steps</h3><p id="steps">8,420</p></div>
+                        <div class="dwid"><i class="fa-solid fa-heart-pulse"></i><h3>BPM</h3><p id="bpm">72</p></div>
+                        <div class="dwid"><i class="fa-solid fa-fire"></i><h3>Calories</h3><p id="cal">320</p></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="dsec" id="ocr">
-                <h2>OCR Scan</h2>
-                <div class="dmed">
-                    <div style="border:2px dashed #2a2a3a; padding:30px;">
-                        <i class="fa-solid fa-cloud-upload-alt" style="font-size:3rem;color:#b33bff;"></i>
-                        <p style="color:#888;margin-top:10px;">Upload Prescription Image</p>
-                        <button class="dbtn" onclick="alert('OCR scanning feature coming soon!')">Scan Now</button>
+                <!-- Profile Section -->
+                <div class="dsec" id="prof" style="display:none;">
+                    <h2>Profile Settings</h2>
+                    <div class="dprof">
+                        <img src="https://ui-avatars.com/api/?name=User&background=b33bff&color=fff" id="pimg" onclick="document.getElementById('fileInput').click();">
+                        <input type="file" id="fileInput" accept="image/*" onchange="uploadPic(this)">
+                        <input type="text" id="pname" placeholder="Full Name" value="User">
+                        <input type="email" id="pemail" placeholder="Email" value="user@email.com" readonly>
+                        <button class="dbtn" onclick="saveProfile()">Save Changes</button>
+                    </div>
+                </div>
+
+                <!-- Exercise Section -->
+                <div class="dsec" id="exer" style="display:none;">
+                    <h2>Exercise <span style="font-size:14px;color:#888;">(Click to start/stop)</span></h2>
+                    <div class="dexer">
+                        <!-- Jump -->
+                        <div class="dexc" onclick="startExercise(this, 'jump')">
+                            <svg class="jump-svg" viewBox="0 0 24 24" width="45" height="45">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                            <span>🏃 Jump</span>
+                            <div class="stopwatch">00:00</div>
+                            <div class="exercise-btn">▶ Start</div>
+                        </div>
+                        
+                        <!-- Run -->
+                        <div class="dexc" onclick="startExercise(this, 'run')">
+                            <svg class="run-svg" viewBox="0 0 24 24" width="45" height="45">
+                                <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/>
+                            </svg>
+                            <span>🏃 Run</span>
+                            <div class="stopwatch">00:00</div>
+                            <div class="exercise-btn">▶ Start</div>
+                        </div>
+                        
+                        <!-- Cycle -->
+                        <div class="dexc" onclick="startExercise(this, 'cycle')">
+                            <svg class="cycle-svg" viewBox="0 0 120 100" width="45" height="45">
+                                <circle cx="30" cy="70" r="18" stroke="#b33bff" stroke-width="3" fill="none"/>
+                                <circle cx="30" cy="70" r="4" fill="#b33bff"/>
+                                <circle cx="85" cy="70" r="18" stroke="#b33bff" stroke-width="3" fill="none"/>
+                                <circle cx="85" cy="70" r="4" fill="#b33bff"/>
+                                <line x1="30" y1="70" x2="55" y2="35" stroke="#b33bff" stroke-width="3"/>
+                                <line x1="55" y1="35" x2="85" y2="70" stroke="#b33bff" stroke-width="3"/>
+                                <line x1="30" y1="70" x2="50" y2="70" stroke="#b33bff" stroke-width="3"/>
+                                <line x1="50" y1="70" x2="85" y2="70" stroke="#b33bff" stroke-width="3"/>
+                                <line x1="45" y1="35" x2="55" y2="38" stroke="#b33bff" stroke-width="4"/>
+                                <line x1="85" y1="70" x2="95" y2="50" stroke="#b33bff" stroke-width="3"/>
+                                <line x1="95" y1="50" x2="100" y2="55" stroke="#b33bff" stroke-width="3"/>
+                                <line x1="55" y1="35" x2="48" y2="50" stroke="#b33bff" stroke-width="2"/>
+                                <line x1="55" y1="35" x2="62" y2="50" stroke="#b33bff" stroke-width="2"/>
+                                <line x1="55" y1="25" x2="70" y2="40" stroke="#ff6b6b" stroke-width="3"/>
+                            </svg>
+                            <span>🚴 Cycle</span>
+                            <div class="stopwatch">00:00</div>
+                            <div class="exercise-btn">▶ Start</div>
+                        </div>
+                        
+                        <!-- Swim -->
+                        <div class="dexc" onclick="startExercise(this, 'swim')">
+                            <svg class="swim-svg" viewBox="0 0 24 24" width="45" height="45">
+                                <path d="M2 16c.5-1.5 2-2 3.5-2s3 .5 4 1c1.5-.5 3-1 4.5-1s3 .5 4.5 1c.5 0 1 .5 1 1"/>
+                                <path d="M4 19c.5-1 1.5-1.5 2.5-1.5s2 .5 3 1c1.5-.5 3-1 4.5-1s3 .5 4.5 1"/>
+                                <path d="M7 12l2-3 3 2 2-2 2 3"/>
+                            </svg>
+                            <span>🏊 Swim</span>
+                            <div class="stopwatch">00:00</div>
+                            <div class="exercise-btn">▶ Start</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medicine Tracker -->
+                <div class="dsec" id="meds" style="display:none;">
+                    <h2>Medicine Tracker</h2>
+                    <div class="dmed">
+                        <div>
+                            <h3>Set Reminder</h3>
+                            <input type="time" id="medtime">
+                            <button onclick="setReminder()">Set</button>
+                            <p id="remstat" style="color:#4caf50;margin-top:10px;font-size:12px;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OCR Scan -->
+                <div class="dsec" id="ocr" style="display:none;">
+                    <h2>OCR Scan</h2>
+                    <div class="dmed">
+                        <div style="border:2px dashed #2a2a3a; padding:30px;">
+                            <i class="fa-solid fa-cloud-upload-alt" style="font-size:3rem;color:#b33bff;"></i>
+                            <p style="color:#888;margin-top:10px;">Upload Prescription Image</p>
+                            <button class="dbtn" onclick="alert('OCR scanning feature coming soon!')">Scan Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Section -->
+                <div class="dsec" id="hist" style="display:none;">
+                    <h2>Recent History</h2>
+                    <div class="hls">
+                        <div class="hitm">
+                            <i class="fa-solid fa-person-running hico"></i>
+                            <div>
+                                <h4>Workout Completed</h4>
+                                <p>30 Mins Running • 220 Cal</p>
+                                <span class="htim">Today, 08:30 AM</span>
+                            </div>
+                        </div>
+                        <div class="hitm">
+                            <i class="fa-solid fa-bell hico"></i>
+                            <div>
+                                <h4>Alarm Triggered</h4>
+                                <p>Morning Medicine Reminder</p>
+                                <span class="htim">Today, 07:00 AM</span>
+                            </div>
+                        </div>
+                        <div class="hitm">
+                            <i class="fa-solid fa-trophy hico"></i>
+                            <div>
+                                <h4>Challenge Accepted</h4>
+                                <p>Walk 10,000 Steps Daily</p>
+                                <span class="htim">Yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Section -->
+                <div class="dsec" id="repo" style="display:none;">
+                    <h2>Monthly PDF Reports</h2>
+                    <div class="rbox">
+                        <h3 class="rmth">August 2026</h3>
+                        <div class="rcrd">
+                            <div class="rhdr">
+                                <i class="fa-solid fa-file-pdf rpdf"></i>
+                                <div>
+                                    <h4 class="runm" id="rptUname">User Health Report</h4>
+                                    <span class="rsub">Generated on Aug 19, 2026</span>
+                                </div>
+                            </div>
+                            <div class="rgrid">
+                                <div class="rsstat">
+                                    <span>Workouts</span>
+                                    <strong>18 Sessions</strong>
+                                </div>
+                                <div class="rsstat">
+                                    <span>Alarms Set</span>
+                                    <strong>12 Alarms</strong>
+                                </div>
+                                <div class="rsstat">
+                                    <span>Challenges</span>
+                                    <strong>5 Completed</strong>
+                                </div>
+                            </div>
+                            <button class="rbtn" onclick="alert('Downloading PDF Report...')"><i class="fa-solid fa-download"></i> Download PDF</button>
+                        </div>
                     </div>
                 </div>
             </div>

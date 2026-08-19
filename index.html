@@ -17,8 +17,9 @@
 <!-- Nav -->
 <nav class="nav">
     <!-- Logo / Home link eka left side -->
-    <a href="index.html" class="linki" style="margin:0; font-weight:bold; font-family:'Bruno Ace'; color:#b33bff;">Rextro</a>
-    
+    <a href="index.html" class="linki" style="margin:0; display:flex; align-items:center;">
+    <img src="logo.png" alt="Rextro Logo" style="height: 40px; width: auto;">
+</a>
     <!-- Hamburger Icon -->
     <div class="hamb" onclick="toggleMenu()">
         <i class="fa-solid fa-bars"></i>
@@ -89,7 +90,10 @@
             <p class="paragi">Founded in 2026. We've helped thousands of patients manage their medications effectively with AI-Powered technology.</p>
         </div>
         <div class="seens">
-            <div class="seen1"><p class="tenk">10K+</p><p class="actu">Active Users</p></div>
+           <div class="seen1">
+    <p class="tenk" id="activeUsersCount">0</p>  <!-- මෙතනට id එකක් එකතු කරන්න -->
+    <p class="actu">Active Users</p>
+</div>
             <div class="seen2"><p class="tenk">50K+</p><p class="actu">Prescriptions Scanned</p></div>
             <div class="seen3"><p class="tenk">99%</p><p class="actu">Accuracy Rate</p></div>
         </div>
@@ -168,7 +172,7 @@
                         <li class="pitem"><i class="fa-solid fa-check flic okic"></i> Background Verification</li>
                         <li class="pitem"><i class="fa-solid fa-xmark flic noic"></i> 24/7 Priority Support</li>
                         </ul>
-                <button class="subscribe">Subscribe</button>
+                <button class="subscribe"id="subscri">Subscribe</button>
             </div>
             <div class="freediv">
                 <h2 class="ftxt">2 Years</h2>
@@ -181,7 +185,7 @@
                         <li class="pitem"><i class="fa-solid fa-check flic okic"></i> Background Verification</li>
                         <li class="pitem"><i class="fa-solid fa-check flic okic"></i> 24/7 Priority Support</li>
                 </ul>
-                <button class="subscribe">Subscribe</button>
+                <button class="subscribe" id="subscri">Subscribe</button>
             </div>
         </div>
     </div>
@@ -258,5 +262,12 @@
 function toggleMenu() {
     document.getElementById('navMenu').classList.toggle('show');
 }
+const button = document.getElementById("subscri");
+
+// Listen for a click event and trigger the alert
+button.addEventListener("click", function() {
+    alert("Coming soon");
+});
+
 </script>
 </html>

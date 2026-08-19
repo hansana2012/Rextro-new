@@ -119,3 +119,23 @@ if(aplBtn) {
         socialLogin(new firebase.auth.OAuthProvider('apple.com'));
     });
 }
+// ==========================================
+// 5. LIVE ACTIVE USERS COUNTER
+// ==========================================
+// මෙය පිටුව පූරණය වන විට සහ දත්ත වෙනස් වන විට update වේ.
+const usersRef = db.ref('users');
+
+usersRef.on('value', (snapshot) => {
+    const count = snapshot.numChildren(); // users ගණන ගන්නවා
+    const displayElement = document.getElementById('activeUsersCount');
+    
+    if (displayElement) {
+        // අගය පෙන්වීම (උදා: 1200 -> "1.2K+")
+        if (count >= 1000) {
+            const kFormat = (count / 1000).toFixed(1) + "K+";
+            displayElement.textContent = kFormat;
+        } else {
+            displayElement.textContent = count + "+";
+        }
+    }
+});
