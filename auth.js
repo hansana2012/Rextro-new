@@ -80,12 +80,17 @@ function socialLogin(provider) {
         .then((result) => {
             const user = result.user;
             
+            // User data එක හරියට save වෙනවාද කියලා check කරන්න
+            console.log("User logged in:", user.displayName, user.email);
+            
             // Realtime Database එකේ User විස්තර Save කිරීම
             return db.ref('users/' + user.uid).update({
                 name: user.displayName,
                 email: user.email,
-                photo: user.photoURL || ""
+                photo: user.photoURL || "",
+                lastLogin: firebase.database.ServerValue.TIMESTAMP
             }).then(() => {
+                console.log("User data saved to database");
                 alert("Welcome " + user.displayName + "!");
                 window.location.href = "dashboard.html";
             });
@@ -95,7 +100,6 @@ function socialLogin(provider) {
             alert("Social Login Error: " + error.message);
         });
 }
-
 // Google Button Click Event
 const gglBtn = document.getElementById('gglbtn');
 if (gglBtn) {
@@ -125,17 +129,37 @@ if(aplBtn) {
 // මෙය පිටුව පූරණය වන විට සහ දත්ත වෙනස් වන විට update වේ.
 const usersRef = db.ref('users');
 
+// මුලින්ම data එක load වෙනකම් බලාගෙන ඉන්න
 usersRef.on('value', (snapshot) => {
-    const count = snapshot.numChildren(); // users ගණන ගන්නවා
-    const displayElement = document.getElementById('activeUsersCount');
-    
-    if (displayElement) {
-        // අගය පෙන්වීම (උදා: 1200 -> "1.2K+")
-        if (count >= 1000) {
-            const kFormat = (count / 1000).toFixed(1) + "K+";
-            displayElement.textContent = kFormat;
+    // snapshot එකේ data තියෙනවාද කියලා check කරන්න
+    if (snapshot.exists()) {
+        const count = snapshot.numChildren(); // users ගණන ගන්නවා
+        console.log("Active users count:", count); // Debug සඳහා
+        
+        const displayElement = document.getElementById('activeUsersCount');
+        
+        if (displayElement) {
+            // අගය පෙන්වීම (උදා: 1200 -> "1.2K+")
+            if (count >= 1000) {
+                const kFormat = (count / 1000).toFixed(1) + "K+";
+                displayElement.textContent = kFormat;
+            } else {
+                displayElement.textContent = count + "+";
+            }
         } else {
-            displayElement.textContent = count + "+";
+            console.warn("Element #activeUsersCount not found in DOM");
         }
+    } else {
+        console.log("No users data found in database");
+        const displayElement = document.getElementById('activeUsersCount');
+        if (displayElement) {
+            displayElement.textContent = "0+";
+        }
+    }
+}, (error) => {
+    console.error("Database error:", error);
+    const displayElement = document.getElementById('activeUsersCount');
+    if (displayElement) {
+        displayElement.textContent = "⚠️";
     }
 });
