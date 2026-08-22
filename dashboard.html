@@ -13,6 +13,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <head>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LczvpItAAAAAF5QpcPLBKGgsSeL0WWb3K-lBH8M"></script>
+  <!-- Your code -->
+</head>
 </head>
 <body>
     <div class="dbod">
@@ -325,6 +329,16 @@
             window.rextroAIReady = false;
         }
         window.dispatchEvent(new Event("rextro-ai-ready"));
+        
+        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+
+  function onClick(e) {
+    e.preventDefault();
+    grecaptcha.enterprise.ready(async () => {
+      const token = await grecaptcha.enterprise.execute('6LczvpItAAAAAF5QpcPLBKGgsSeL0WWb3K-lBH8M', {action: 'LOGIN'});
+    });
+  }
+
     </script>
     <script src="dashboard.js"></script>
 
