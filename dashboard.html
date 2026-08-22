@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-     <link rel="stylesheet" href="style2.css">
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -229,49 +228,27 @@
                     <div class="ai-agent-shell">
                         <div class="ai-agent-header">
                             <div class="ai-agent-title">
-                                <div class="ai-agent-icon">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                </div>
-                                <div>
-                                    <h2>Rextro AI Agent</h2>
-                                    <p>Your smart dashboard assistant</p>
-                                </div>
+                                <div class="ai-agent-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                <div><h2>Rextro AI Agent</h2><p>Your smart dashboard assistant</p></div>
                             </div>
-                            <span class="ai-status"><span class="ai-status-dot"></span> Rextro AI</span>
+                            <span class="ai-status"><span class="ai-status-dot"></span> Gemini AI</span>
                         </div>
-
                         <div class="ai-suggestions">
-                            <button type="button" onclick="useAiPrompt('Give me a simple summary of my dashboard stats.')">
-                                <i class="fa-solid fa-chart-simple"></i> Dashboard summary
-                            </button>
-                            <button type="button" onclick="useAiPrompt('Give me some safe general wellness tips for today.')">
-                                <i class="fa-solid fa-heart"></i> Wellness tips
-                            </button>
-                            <button type="button" onclick="useAiPrompt('Explain what the health numbers on this dashboard generally mean.')">
-                                <i class="fa-solid fa-circle-question"></i> Explain stats
-                            </button>
+                            <button type="button" onclick="useAiPrompt('Give me a simple summary of my dashboard stats.')"><i class="fa-solid fa-chart-simple"></i> Dashboard summary</button>
+                            <button type="button" onclick="useAiPrompt('Give me some safe general wellness tips for today.')"><i class="fa-solid fa-heart"></i> Wellness tips</button>
+                            <button type="button" onclick="useAiPrompt('Open the exercise section.')"><i class="fa-solid fa-dumbbell"></i> Open Exercise</button>
                         </div>
-
                         <div class="ai-chat" id="aiChat">
                             <div class="ai-message ai-message-bot">
                                 <div class="ai-avatar"><i class="fa-solid fa-robot"></i></div>
-                                <div class="ai-bubble">
-                                    <strong>Rextro AI</strong>
-                                    <p>Hi! I'm your Rextro AI assistant. Ask me about your dashboard, exercise, general wellness, or how to use Rextro.</p>
-                                </div>
+                                <div class="ai-bubble"><strong>Rextro AI</strong><p>Hi! I can answer questions about your dashboard and perform supported dashboard actions.</p></div>
                             </div>
                         </div>
-
                         <form class="ai-input-row" id="aiForm">
                             <textarea id="aiInput" rows="1" placeholder="Ask Rextro AI anything..." autocomplete="off"></textarea>
-                            <button type="submit" id="aiSendBtn" aria-label="Send message">
-                                <i class="fa-solid fa-paper-plane"></i>
-                            </button>
+                            <button type="submit" id="aiSendBtn" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
                         </form>
-                        <div class="ai-note">
-                            <i class="fa-solid fa-shield-halved"></i>
-                            AI responses are for general information and are not a substitute for professional medical advice.
-                        </div>
+                        <div class="ai-note"><i class="fa-solid fa-shield-halved"></i> AI responses are general information, not professional medical advice.</div>
                     </div>
                 </div>
 
@@ -280,8 +257,76 @@
     </div>
 
 </section>
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+        import { getAI, getGenerativeModel, GoogleAIBackend, Schema } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-ai.js";
+
+        const rextroFirebaseConfig = {
+            apiKey: "AIzaSyCB5vUpkeHUG8S0YC1tkNFxM9fmiXehg1c",
+            authDomain: "rextro-a29a2.firebaseapp.com",
+            databaseURL: "https://rextro-a29a2-default-rtdb.firebaseio.com",
+            projectId: "rextro-a29a2",
+            storageBucket: "rextro-a29a2.firebasestorage.app",
+            messagingSenderId: "563362233355",
+            appId: "1:563362233355:web:8683f46669e9d7a6aa9b0e",
+            measurementId: "G-H40F0FXVC2"
+        };
+
+        try {
+            const aiApp = getApps().length ? getApp() : initializeApp(rextroFirebaseConfig);
+            // Initialize modular Auth on the same Firebase app so Firebase AI Logic
+            // can see the Firebase Authentication session.
+            getAuth(aiApp);
+
+            const firebaseAI = getAI(aiApp, { backend: new GoogleAIBackend() });
+
+            const dashboardTools = {
+                functionDeclarations: [
+                    {
+                        name: "openDashboardSection",
+                        description: "Open one of the user's dashboard sections. Use this when the user asks to open, show, go to, or switch to a dashboard section.",
+                        parameters: Schema.object({
+                            properties: {
+                                section: Schema.string({
+                                    description: "Dashboard section to open.",
+                                    enum: ["home", "prof", "exer", "meds", "ocr", "hist", "repo", "ai"]
+                                })
+                            },
+                            required: ["section"]
+                        })
+                    },
+                    {
+                        name: "getDashboardStats",
+                        description: "Read the current Steps, BPM, and Calories values visible on the dashboard.",
+                        parameters: Schema.object({ properties: {} })
+                    },
+                    {
+                        name: "setMedicineReminder",
+                        description: "Set the medicine reminder time in the dashboard. Only use when the user explicitly asks to set a reminder.",
+                        parameters: Schema.object({
+                            properties: {
+                                time: Schema.string({ description: "Time in 24-hour HH:MM format." })
+                            },
+                            required: ["time"]
+                        })
+                    }
+                ]
+            };
+
+            window.rextroGeminiModel = getGenerativeModel(firebaseAI, {
+                model: "gemini-3.6-flash",
+                tools: dashboardTools
+            });
+            window.rextroAIReady = true;
+        } catch (error) {
+            console.error("Firebase AI Logic initialization failed:", error);
+            window.rextroAIReady = false;
+        }
+        window.dispatchEvent(new Event("rextro-ai-ready"));
+    </script>
     <script src="dashboard.js"></script>
-    <script src="ai.js"></script>
 
 </body>
 </html>

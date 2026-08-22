@@ -9,6 +9,12 @@ const firebaseConfig = {
     measurementId: "G-H40F0FXVC2"
 };
 
+// Firebase services used by the existing dashboard.
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const db = firebase.database();
 
 // ==========================================
 // 4. SAVE PROFILE
@@ -362,3 +368,227 @@ function toggleNav() {
         dnav.classList.toggle('show');
     }
 }
+
+// ==========================================
+// REXTRO AI AGENT - Firebase AI Logic
+// ==========================================
+let rextroAIChat = null;
+let rextroAIInitialized = false;
+
+function showSection(sectionId) {
+    document.querySelectorAll('.dsec').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    const target = document.getElementById(sectionId);
+    if (target) target.style.display = 'block';
+
+    document.querySelectorAll('.dnav .dlk').forEach(link => {
+        link.classList.remove('act');
+        const onclick = link.getAttribute('onclick') || '';
+        if (onclick.includes("'" + sectionId + "'") || onclick.includes('"' + sectionId + '"')) {
+            link.classList.add('act');
+        }
+    });
+
+    if (window.innerWidth <= 768) {
+        document.getElementById('dnav')?.classList.remove('show');
+    }
+}
+
+function getDashboardStatsForAI() {
+    return {
+        steps: parseInt(document.getElementById('steps')?.innerText?.replace(/,/g, ''), 10) || 0,
+        bpm: parseInt(document.getElementById('bpm')?.innerText, 10) || 0,
+        calories: parseInt(document.getElementById('cal')?.innerText, 10) || 0
+    };
+}
+
+function addAiMessage(text, type = 'bot') {
+    const chat = document.getElementById('aiChat');
+    if (!chat) return null;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ai-message ai-message-' + type;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'ai-avatar';
+    avatar.innerHTML = type === 'user'
+        ? '<i class="fa-solid fa-user"></i>'
+        : '<i class="fa-solid fa-robot"></i>';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'ai-bubble';
+
+    if (type === 'bot') {
+        const strong = document.createElement('strong');
+        strong.textContent = 'Rextro AI';
+        bubble.appendChild(strong);
+    }
+
+    const p = document.createElement('p');
+    p.textContent = text;
+    bubble.appendChild(p);
+    wrapper.append(avatar, bubble);
+    chat.appendChild(wrapper);
+    chat.scrollTop = chat.scrollHeight;
+    return p;
+}
+
+function useAiPrompt(prompt) {
+    const input = document.getElementById('aiInput');
+    if (!input) return;
+    input.value = prompt;
+    input.focus();
+    input.dispatchEvent(new Event('input'));
+}
+
+function autoResizeAiInput() {
+    const input = document.getElementById('aiInput');
+    if (!input) return;
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 130) + 'px';
+}
+
+function setAiLoading(loading) {
+    const btn = document.getElementById('aiSendBtn');
+    const input = document.getElementById('aiInput');
+    if (btn) {
+        btn.disabled = loading;
+        btn.innerHTML = loading
+            ? '<i class="fa-solid fa-spinner fa-spin"></i>'
+            : '<i class="fa-solid fa-paper-plane"></i>';
+    }
+    if (input) input.disabled = loading;
+}
+
+async function runDashboardTool(name, args) {
+    switch (name) {
+        case 'openDashboardSection': {
+            const allowed = ['home', 'prof', 'exer', 'meds', 'ocr', 'hist', 'repo', 'ai'];
+            if (!allowed.includes(args.section)) return { ok: false, error: 'Section is not allowed.' };
+            showSection(args.section);
+            return { ok: true, opened: args.section };
+        }
+
+        case 'getDashboardStats':
+            return { ok: true, ...getDashboardStatsForAI() };
+
+        case 'setMedicineReminder': {
+            const time = String(args.time || '').trim();
+            if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) {
+                return { ok: false, error: 'Time must use HH:MM format.' };
+            }
+            const input = document.getElementById('medtime');
+            const status = document.getElementById('remstat');
+            if (!input || !status) return { ok: false, error: 'Medicine reminder UI is unavailable.' };
+            input.value = time;
+            status.innerText = 'Reminder set for ' + time;
+            return { ok: true, reminderTime: time };
+        }
+
+        default:
+            return { ok: false, error: 'Unknown dashboard tool.' };
+    }
+}
+
+async function sendAiMessage(message) {
+    if (!rextroAIInitialized || !window.rextroGeminiModel) {
+        throw new Error('Firebase AI Logic is not ready. Check Firebase AI Logic setup and App Check.');
+    }
+
+    const currentUser = window.firebase?.auth?.().currentUser;
+    if (!currentUser) {
+        throw new Error('Please log in with Firebase Authentication before using Rextro AI.');
+    }
+
+    if (!rextroAIChat) {
+        rextroAIChat = window.rextroGeminiModel.startChat();
+    }
+
+    const stats = getDashboardStatsForAI();
+    const userName = document.getElementById('uname')?.innerText || 'User';
+    const prompt = `
+You are Rextro AI, the assistant inside the user's dashboard.
+User: ${userName}
+Current dashboard values: Steps=${stats.steps}, BPM=${stats.bpm}, Calories=${stats.calories}.
+You can use dashboard tools when the user asks you to perform a supported action.
+Never invent dashboard values. For health questions, provide general information only and encourage a trusted adult or qualified healthcare professional for serious concerns.
+User request: ${message}
+`;
+
+    let result = await rextroAIChat.sendMessage(prompt);
+
+    // Gemini may ask the browser to execute one or more dashboard functions.
+    for (let round = 0; round < 4; round++) {
+        const functionCalls = result.response.functionCalls();
+        if (!functionCalls || functionCalls.length === 0) {
+            return result.response.text();
+        }
+
+        const responses = [];
+        for (const call of functionCalls) {
+            const toolResult = await runDashboardTool(call.name, call.args || {});
+            responses.push({
+                functionResponse: {
+                    name: call.name,
+                    response: toolResult
+                }
+            });
+        }
+
+        result = await rextroAIChat.sendMessage(responses);
+    }
+
+    return result.response.text() || 'Done.';
+}
+
+async function handleAiSubmit(event) {
+    event.preventDefault();
+    const input = document.getElementById('aiInput');
+    if (!input) return;
+
+    const message = input.value.trim();
+    if (!message) return;
+
+    addAiMessage(message, 'user');
+    input.value = '';
+    autoResizeAiInput();
+    setAiLoading(true);
+
+    const loading = addAiMessage('Thinking...', 'bot');
+
+    try {
+        const answer = await sendAiMessage(message);
+        if (loading) loading.textContent = answer;
+    } catch (error) {
+        console.error('Rextro AI error:', error);
+        if (loading) loading.textContent = error.message;
+    } finally {
+        setAiLoading(false);
+        input.focus();
+    }
+}
+
+function initRextroAI() {
+    if (rextroAIInitialized) return;
+    rextroAIInitialized = !!window.rextroAIReady && !!window.rextroGeminiModel;
+
+    const form = document.getElementById('aiForm');
+    const input = document.getElementById('aiInput');
+    form?.addEventListener('submit', handleAiSubmit);
+    input?.addEventListener('input', autoResizeAiInput);
+    input?.addEventListener('keydown', event => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            form?.requestSubmit();
+        }
+    });
+}
+
+window.addEventListener('rextro-ai-ready', initRextroAI);
+document.addEventListener('DOMContentLoaded', () => {
+    // Module scripts are deferred, so this may run before the AI bootstrap.
+    if (window.rextroAIReady) initRextroAI();
+    showSection('home');
+});
