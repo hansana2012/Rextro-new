@@ -9,49 +9,6 @@ const firebaseConfig = {
     measurementId: "G-H40F0FXVC2"
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-
-// ==========================================
-// 2. AUTH GUARD (Redirect to Login if not logged in)
-// ==========================================
-auth.onAuthStateChanged((user) => {
-    if (!user) {
-        window.location.href = "login.html";
-    } else {
-        loadDashboardData(user);
-    }
-});
-
-// ==========================================
-// 3. LOAD DASHBOARD DATA
-// ==========================================
-function loadDashboardData(user) {
-    document.getElementById('uname').innerText = user.displayName || "User";
-    document.getElementById('pname').value = user.displayName || "";
-    document.getElementById('pemail').value = user.email || "";
-
-    if (user.photoURL) {
-        document.getElementById('uimg').src = user.photoURL;
-        document.getElementById('pimg').src = user.photoURL;
-    } else {
-        db.ref('users/' + user.uid + '/photo').on('value', (snapshot) => {
-            if (snapshot.val()) {
-                document.getElementById('pimg').src = snapshot.val();
-                document.getElementById('uimg').src = snapshot.val();
-            }
-        });
-    }
-
-    db.ref('users/' + user.uid + '/stats').on('value', (snapshot) => {
-        if (snapshot.val()) {
-            document.getElementById('steps').innerText = snapshot.val().steps || 0;
-            document.getElementById('bpm').innerText = snapshot.val().bpm || 0;
-            document.getElementById('cal').innerText = snapshot.val().cal || 0;
-        }
-    });
-}
 
 // ==========================================
 // 4. SAVE PROFILE
@@ -403,32 +360,5 @@ function toggleNav() {
     const dnav = document.getElementById('dnav');
     if (dnav) {
         dnav.classList.toggle('show');
-    }
-}
-
-// Show/Hide Section Call
-function showSection(sectionId) {
-    document.querySelectorAll('.dsec').forEach(section => {
-        section.style.display = 'none';
-    });
-    
-    const target = document.getElementById(sectionId);
-    if (target) {
-        target.style.display = 'block';
-    }
-    
-    document.querySelectorAll('.dlk').forEach(link => {
-        link.classList.remove('act');
-    });
-    
-    const clickedLink = document.querySelector(`.dlk[onclick="showSection('${sectionId}')"]`);
-    if (clickedLink) {
-        clickedLink.classList.add('act');
-    }
-    
-    // Section එකක් Select කළ පසු Mobile Nav එක Close කරන්න
-    const dnav = document.getElementById('dnav');
-    if (dnav) {
-        dnav.classList.remove('show');
     }
 }

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+     <link rel="stylesheet" href="style2.css">
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -30,6 +31,7 @@
         <li><a href="#" class="dlk" onclick="showSection('ocr')"><i class="fa-solid fa-camera"></i> OCR Scan</a></li>
         <li><a href="#" class="dlk" onclick="showSection('hist')"><i class="fa-solid fa-clock-rotate-left"></i> History</a></li>
         <li><a href="#" class="dlk" onclick="showSection('repo')"><i class="fa-solid fa-file-pdf"></i> Reports</a></li>
+        <li><a href="#" class="dlk" onclick="showSection('ai')"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</a></li>
         <li><a href="#" id="logoutBtn" class="dlk"><i class="fa-solid fa-right-from-bracket" style="color:#f44336;"></i> Logout</a></li>
     </ul>
 </nav>
@@ -221,10 +223,65 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- AI Agent Section -->
+                <div class="dsec ai-agent-section" id="ai" style="display:none;">
+                    <div class="ai-agent-shell">
+                        <div class="ai-agent-header">
+                            <div class="ai-agent-title">
+                                <div class="ai-agent-icon">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div>
+                                    <h2>Rextro AI Agent</h2>
+                                    <p>Your smart dashboard assistant</p>
+                                </div>
+                            </div>
+                            <span class="ai-status"><span class="ai-status-dot"></span> Rextro AI</span>
+                        </div>
+
+                        <div class="ai-suggestions">
+                            <button type="button" onclick="useAiPrompt('Give me a simple summary of my dashboard stats.')">
+                                <i class="fa-solid fa-chart-simple"></i> Dashboard summary
+                            </button>
+                            <button type="button" onclick="useAiPrompt('Give me some safe general wellness tips for today.')">
+                                <i class="fa-solid fa-heart"></i> Wellness tips
+                            </button>
+                            <button type="button" onclick="useAiPrompt('Explain what the health numbers on this dashboard generally mean.')">
+                                <i class="fa-solid fa-circle-question"></i> Explain stats
+                            </button>
+                        </div>
+
+                        <div class="ai-chat" id="aiChat">
+                            <div class="ai-message ai-message-bot">
+                                <div class="ai-avatar"><i class="fa-solid fa-robot"></i></div>
+                                <div class="ai-bubble">
+                                    <strong>Rextro AI</strong>
+                                    <p>Hi! I'm your Rextro AI assistant. Ask me about your dashboard, exercise, general wellness, or how to use Rextro.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form class="ai-input-row" id="aiForm">
+                            <textarea id="aiInput" rows="1" placeholder="Ask Rextro AI anything..." autocomplete="off"></textarea>
+                            <button type="submit" id="aiSendBtn" aria-label="Send message">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                        <div class="ai-note">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            AI responses are for general information and are not a substitute for professional medical advice.
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
+</section>
     <script src="dashboard.js"></script>
+    <script src="ai.js"></script>
+
 </body>
 </html>
